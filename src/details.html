@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags and title -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details</title>
+  <!-- CSS links -->
+  <link rel="stylesheet" href="movie.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="search.html"><i class="fa fa-search"><span style="font-family: sans-serif;"> Search</span></i></a>
+        <a href="index.html"><i class="fa fa-home"><span style="font-family: sans-serif;"> Home</span></i></a>
+        <a href="movie.html"><i class="fa fa-video-camera"><span style="font-family: sans-serif;"> Movie</span></i></a></a>
+        <a href="rating.html"><i class="fa fa-bookmark"><span style="font-family: sans-serif;"> Bookmark</span></i></a>
+    </div>
+
+    <div class="sticky">
+        <span style="font-size: 20px; cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+        <span style="margin-right: 50px; margin-top: -6.5px; float: right;">  
+            <input type="text" id="searchInput" placeholder="Search" oninput="suggestMovies()">
+            <button onclick="searchMovie()">Search</button>
+        </span>
+        <span style="float: right; margin-top: -14.5px; margin-right: 25px;">
+            <img src="logo.png" alt="logo" width="100%" height="10%">
+        </span>
+    </div>
+
+    <!-- Display movie information -->
+    <div class="container">
+        <center>
+            <!-- Trailer container -->
+            <div id="trailer-container" style="margin-top: 20px;"></div>
+        </center>
+
+        <h2>Movie Details</h2>
+        <div id="movieDetails">
+            <p><strong>Title:</strong> <span id="title"></span></p>
+            <p><strong>Year:</strong> <span id="year"></span></p>
+            <p><strong>Plot:</strong> <span id="plot"></span></p>
+            <p><strong>Director:</strong> <span id="director"></span></p>
+            <p><strong>Actors:</strong> <span id="actors"></span></p>
+        </div>
+        
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Retrieve encoded movie info from the URL
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const encodedInfo = urlParams.get('info');
+
+            // Decode and parse the JSON string
+            const movieInfo = JSON.parse(decodeURIComponent(encodedInfo));
+
+            // Display movie information
+            document.getElementById('title').textContent = movieInfo.title;
+            document.getElementById('year').textContent = movieInfo.year;
+            document.getElementById('plot').textContent = movieInfo.plot;
+            document.getElementById('director').textContent = movieInfo.director;
+            document.getElementById('actors').textContent = movieInfo.actors;
+
+            // Fetch and display trailer for the movie
+            fetchAndDisplayTrailerForMovie(movieInfo.title);
+        });
+
+        function fetchAndDisplayTrailerForMovie(movieTitle) {
+            const trailerContainer = document.getElementById("trailer-container");
+            const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(movieTitle)}+trailer`;
+
+            fetch(searchUrl)
+                .then(response => response.text())
+                .then(data => {
+                    const match = data.match(/"videoId":"([^"]+)"/);
+                    if (match && match[0]) {
+                        const videoId = match[1];
+                        const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+
+                        const iframe = document.createElement("iframe");
+                        iframe.setAttribute("width", "1250");
+                        iframe.setAttribute("height", "500");
+                        iframe.setAttribute("src", embedUrl);
+                        iframe.setAttribute("frameborder", "0");
+                        iframe.setAttribute("allowfullscreen", "");
+
+                        trailerContainer.innerHTML = ""; // Clear previous trailer
+                        trailerContainer.appendChild(iframe);
+                    } else {
+                        console.log(`Trailer not found for ${movieTitle}.`);
+                        trailerContainer.innerHTML = "<p>Trailer not found.</p>";
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error fetching YouTube search results for ${movieTitle}:`, error);
+                    trailerContainer.innerHTML = "<p>Error fetching trailer.</p>";
+                });
+        }
+
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+    </script>
+</body>
+</html>

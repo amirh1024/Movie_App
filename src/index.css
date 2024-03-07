@@ -1,0 +1,138 @@
+/* Overall styling */
+body {
+  margin: auto;
+  padding: auto;
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
+}
+
+.container {
+  max-width: 1250px;
+  margin: 0px auto;
+  width: 95%;
+}
+
+.row {
+  display: flex;
+}
+
+/* Sticky sidebar */
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: #111;
+  font-family: sans-serif;
+  font-size: 15xp;
+  padding: 30px;
+}
+
+/* Sidebar navigation */
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 50px 32px;
+  text-decoration: none;
+  font-family: sans-serif;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* Responsive design for smaller screens */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+/* Suggestions */
+.suggestion {
+  display: inline-block;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* Poster */
+.poster {
+  width: 200px;
+  height: auto;
+  margin-right: 5px;
+  margin-top: 5px;
+  vertical-align: middle;
+}
+
+/* Input field */
+input {
+  width: 300px;
+  height: 30px;
+  border-radius: 15px;
+}
+
+/* Button */
+button {
+  height: 30px;
+  border-radius: 15px;
+}
+
+/* Suggestions container */
+#suggestions {
+  max-height: 200px;
+  max-width: 300px; 
+  overflow-y: auto; 
+}
+
+/* Individual suggestion item */
+.suggestion-item {
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  padding: 5px;
+  cursor: pointer; 
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0; 
+}
+
+/* Trailer and movie results section */
+.trailer-and-results {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Trailer container */
+.trailer-container {
+  width: 60%;
+}
+
+/* Movie details */
+.movie-details {
+  position: absolute;
+  width: 35%;
+  padding-left: 850px; /* Adjust this value according to your layout */
+}

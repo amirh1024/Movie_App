@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Title -->
+  <title>Home page</title>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="index.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- External JavaScript -->
+  <script src="index.js"></script>
+</head>
+<body>
+  <!-- Side navigation menu -->
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <!-- Navigation links -->
+    <a href="search.html"><i class="fa fa-search"><span style="font-family: sans-serif;"> Search</span></i></a>
+    <a href="index.html"><i class="fa fa-home"><span style="font-family: sans-serif;"> Home</span></i></a>
+    <a href="movie.html"><i class="fa fa-video-camera"><span style="font-family: sans-serif;"> Movie</span></i></a></a>
+    <a href="rating.html"><i class="fa fa-bookmark"><span style="font-family: sans-serif;"> Bookmark</span></i></a>
+  </div>
+  <!-- Sticky header -->
+  <div class="sticky">
+    <!-- Menu button -->
+    <span style="font-size: 20px; cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+    <!-- Search input -->
+    <span style="margin-right: 50px; margin-top: -6.5px; float: right;">
+      <input type="text" id="searchData" placeholder="Search" oninput="showSuggestions()">
+      <button onclick="searchMovie()">Search</button>
+      <div id="suggestions"></div>
+    </span>
+    <!-- Logo -->
+    <span style="float: right; margin-top: -14.5px; margin-right: 25px;">
+      <img src="logo.png" alt="logo" width="100%" height="10%">
+    </span>
+  </div>
+  <!-- Main content container -->
+  <div class="container">
+    <!-- Trailer container -->
+    <div id="trailer-container" style="margin-top: 10px;"></div>
+    <!-- Placeholder for search results -->
+    <div id="result"></div>
+  </div>
+  <!-- JavaScript for fetching and displaying trailer -->
+  <script>
+    const movieTitles = ["Dune: Part Two", "Poor Things", "Oppenheimer", "Madame Web", "Anyone But You", "Borderlands", "The Zone of Interest", "Spaceman", "Mea Culpa", "Horizon: An American Saga - Chapter 1"];
+    function getRandomMovieTitle() {
+      return movieTitles[Math.floor(Math.random() * movieTitles.length)];
+    }
+    function fetchAndDisplayTrailer(movieTitle) {
+      const trailerContainer = document.getElementById("trailer-container");
+      const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(movieTitle)}+trailer`;
+      fetch(searchUrl)
+        .then(response => response.text())
+        .then(data => {
+          const match = data.match(/"videoId":"([^"]+)"/);
+          if (match && match[1]) {
+            const videoId = match[1];
+            const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+            const iframe = document.createElement("iframe");
+            iframe.setAttribute("width", "1250");
+            iframe.setAttribute("height", "650");
+            iframe.setAttribute("src", embedUrl);
+            iframe.setAttribute("frameborder", "0");
+            iframe.setAttribute("allowfullscreen", "");
+            trailerContainer.innerHTML = "";
+            trailerContainer.appendChild(iframe);
+          } else {
+            console.log(`Trailer not found for ${movieTitle}.`);
+            trailerContainer.innerHTML = "<p>Trailer not found.</p>";
+          }
+        })
+        .catch(error => {
+          console.error(`Error fetching YouTube search results for ${movieTitle}:`, error);
+          trailerContainer.innerHTML = "<p>Error fetching trailer.</p>";
+        });
+    }
+    // Fetch and display a random movie trailer
+    fetchAndDisplayTrailer(getRandomMovieTitle());
+  </script>
+</body>
+</html>
